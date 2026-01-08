@@ -1,6 +1,6 @@
 CC      := gcc
 CFLAGS  := -Wall -Wextra -Wconversion -Wsign-conversion -Werror -pedantic
-TARGET  := app
+TARGET  := sedit
 SRC     := main.c
 OBJ     := $(SRC:.c=.o)
 
