@@ -2,7 +2,7 @@
 
 A minimal terminal based text editor written in C for Windows :3
 
-This is a learning project to better understanding how text editors work! (also learning how to use github >w<)
+This is a learning project to better understand how text editors work! (also learning how to use GitHub >w<)
 
 ---
 
@@ -25,9 +25,18 @@ Build using make:
 ```sh
 make
 ```
+
+---
+
 ## Usage
 
 Run with a filename:
 ```sh
 ./sedit filename.txt
+```
 
+---
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history and changes.
