@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <conio.h>
 
-#define VERSION "v0.02"
+#define VERSION "v0.2.0"
 #define BUFFER_SIZE 4096
 #define BACKSPACE 8
 #define ESCAPE 27
