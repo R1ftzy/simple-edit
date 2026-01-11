@@ -4,6 +4,8 @@ A minimal terminal based text editor written in C for Windows :3
 
 This is a learning project to better understand how text editors work! (also learning how to use GitHub >w<)
 
+**[Download the latest Windows build](https://github.com/R1ftzy/simple-edit/releases/latest)**
+
 ---
 
 ## Features
@@ -41,3 +43,4 @@ Run with a filename:
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history and changes.
+
