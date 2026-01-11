@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3.0
+- Added cursor support with left/right arrow key
+- Improved visual cursor rendering
+- Improved in-buffer insertion and deletion
+  
 ## v0.2.0
 - Initial usable version
 - Rewritten to use an in-memory buffer for editing
