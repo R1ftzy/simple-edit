@@ -3,7 +3,7 @@
 #include <conio.h>
 #include <string.h>
 
-#define VERSION "v0.3.0"
+#define VERSION "v0.3.1"
 #define BUFFER_SIZE 4096
 #define BACKSPACE 8
 #define ESCAPE 27
@@ -130,13 +130,12 @@ int main(int argc, char *argv[])
         continue;
       }
 
-      if (cursor < BUFFER_SIZE - 1)
+      if (cursor < BUFFER_SIZE - 1 && key >= 32 && key <= 126)
       {
-        shiftRight(buffer+cursor);
+        shiftRight(buffer + cursor);
         buffer[cursor++] = (char)key;
       }
     }
-    
   }
   clearScreen();
   printf("## \"%s\" SAVED WITH CONTENTS:\n\n%s\n", filename, buffer);
