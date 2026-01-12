@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <string.h>
+#include <stdbool.h>
 
-#define VERSION "v0.3.1"
+#define VERSION "v0.3.2"
 #define BUFFER_SIZE 4096
 #define BACKSPACE 8
 #define ESCAPE 27
@@ -18,7 +19,7 @@ enum MODE
 void clearScreen()
 {
   system("cls");
-  printf("##BASIC WINDOWS TUI TEXT EDITOR VERSION: %s\n\n", VERSION);
+  printf("##SIMPLE-EDIT VERSION: %s\n\n", VERSION);
 }
 
 int bufferLoad(FILE *file, char *buffer)
@@ -62,28 +63,43 @@ void shiftLeft(char *buffer)
   }
 }
 
+int saveFile(const char *filename, char *buffer){
+  FILE *file = fopen(filename, "w");
+  if (!file)
+    return 1;
+  fwrite(buffer, 1, strlen(buffer), file);
+  fclose(file);
+  return 0;
+}
+
 int main(int argc, char *argv[])
 {
   const char *filename = (argc >= 2) ? argv[1] : "untitled.txt";
   enum MODE mode = NORMAL;
   char buffer[BUFFER_SIZE];
-  buffer[0] = '\0';
+  bool modified = false;
+  int len;
+
   FILE *file = fopen(filename, "r");
-  if (!file)
+  if (file)
   {
-    file = fopen(filename, "w+");
-    if (!file)
-      return 1;
+    len = bufferLoad(file, buffer);
+    fclose(file);
   }
-  int len = bufferLoad(file, buffer);
+  else 
+  {
+    buffer[0]='\0';
+    len = 0;
+  }
   int cursor = len;
-  fclose(file);
+
+  int key;
   while (1)
   {
     clearScreen();
-    printf("##CURRENT FILE: \"%s\"\nINDEX<%d>, MODE = %s \nNORMAL MODE: 'i' = enter insert mode, 'q' = save and quit\nEXIT INSERT MODE USING: 'ESC'\n~\n~\n", filename, cursor, (mode==NORMAL)?"NORMAL":"INSERT");
+    printf("##CURRENT FILE: \"%s\" %s\nINDEX<%d/%d>, MODE = %s\n|--[i] INSERT mode, [esc] NORMAL mode, [s] save, [w] save and quit, [q] quit without saving\n~\n~\n", filename, (modified==true)?"(modified)":"", cursor, len, (mode==NORMAL)?"NORMAL":"INSERT");
     drawBuffer(buffer, cursor);
-    int key = _getch();
+    key = _getch();
     if (key == 0 || key == 224)
     {
       int extended = _getch();
@@ -94,7 +110,7 @@ int main(int argc, char *argv[])
           cursor--;
         break;
       case ARROW_RIGHT:
-        if (cursor < (int)strlen(buffer))
+        if (cursor < len)
           cursor++;
         break;
       }
@@ -104,8 +120,25 @@ int main(int argc, char *argv[])
     {
       if (key == 'i')
         mode = INSERT;
-      else if (key == 'q')
+      else if (key == 'w')
         break;
+      else if (key == 'q')
+      {
+        if (modified == true)
+        {
+          printf("\n\nUnsaved changes detected D:\n|--[q] Discard changes, [w] Save and exit, [s] Save and continue, [esc] Cancel: ");
+          key = _getch();
+          if (key == 'q' || key == 'w')
+            break;
+        }
+        else break;
+      }
+      if (key == 's')
+      {
+        saveFile(filename, buffer);
+        modified = false;
+        continue;
+      }
       continue;
     }
     else if (mode == INSERT)
@@ -117,33 +150,41 @@ int main(int argc, char *argv[])
       }
       if (key == '\r')
       {
-        if (cursor < BUFFER_SIZE - 1){
+        modified = true;
+        if (len < BUFFER_SIZE - 1){
           shiftRight(buffer+cursor);
           buffer[cursor++] = '\n';
+          len++;
         }
         continue;
       }
       if (key == BACKSPACE && cursor > 0)
       {
+        modified = true;
+        len--;
         cursor--;
         shiftLeft(buffer+cursor);
         continue;
       }
 
-      if (cursor < BUFFER_SIZE - 1 && key >= 32 && key <= 126)
+      if (len < BUFFER_SIZE - 1 && key >= 32 && key <= 126)
       {
+        len++;
+        modified = true;
         shiftRight(buffer + cursor);
         buffer[cursor++] = (char)key;
       }
     }
   }
   clearScreen();
-  printf("## \"%s\" SAVED WITH CONTENTS:\n\n%s\n", filename, buffer);
-
-  file = fopen(filename, "w");
-  if (!file)
-    return 1;
-  fwrite(buffer, 1, strlen(buffer), file);
-  fclose(file);
+  if (key == 'w')
+  {
+    saveFile(filename, buffer);
+    printf("## \"%s\" - saved successfully :D\n", filename);
+  }
+  else if (modified)
+    printf("## \"%s\" - unsaved changes discarded >:C\n", filename);
+  else
+    printf("## \"%s\" - closed :P\n", filename);    
   return 0;
 }

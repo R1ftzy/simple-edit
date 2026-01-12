@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.3.2
+- Added more save options ( [s] save, [q] quit, [w] save and quit )
+- Improved status display and prompts
+- Files are now only created when saved
+  
+## v0.3.1
+- Fixed buffer handling bug that caused unintended characters to be saved
+
 ## v0.3.0
 - Added cursor support with left/right arrow key
 - Improved visual cursor rendering

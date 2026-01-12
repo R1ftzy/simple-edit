@@ -13,8 +13,8 @@ This is a learning project to better understand how text editors work! (also lea
 - Normal / Insert mode (vim-inspired)
 - Cursor support with arrow key movement
 - Edit text in-memory using a fixed-size buffer (for now)
-- Open an existing file or create a new one
-- Save on exit
+- Open existing files or create new ones
+- Explicit save and quit commands with unsaved changes protection
 
 ---
 
