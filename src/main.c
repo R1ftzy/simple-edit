@@ -32,9 +32,8 @@ int bufferLoad(FILE *file, char *buffer)
   return i;
 }
 
-void drawBuffer(char *buffer, int cursor)
+void drawBuffer(char *buffer, int cursor, int len)
 {
-  int len = (int)strlen(buffer);
   if (cursor==0)
     printf("|");
   for (int i = 0; i < len; i++)
@@ -45,29 +44,27 @@ void drawBuffer(char *buffer, int cursor)
   }
 }
 
-void shiftRight(char *buffer)
+void shiftRight(char *buffer, int len)
 {
-  size_t len = strlen(buffer);
-  for (int i = (int)len; i >= 0; i--)
+  for (int i = len; i >= 0; i--)
   {
     buffer[i+1]=buffer[i];
   }
 }
 
-void shiftLeft(char *buffer)
+void shiftLeft(char *buffer, int len)
 {
-  size_t len = strlen(buffer);
-  for (size_t i = 0; i <= len; i++)
+  for (int i = 0; i <= len; i++)
   {
     buffer[i]=buffer[i+1];
   }
 }
 
-int saveFile(const char *filename, char *buffer){
+int saveFile(const char *filename, char *buffer, int len){
   FILE *file = fopen(filename, "w");
   if (!file)
     return 1;
-  fwrite(buffer, 1, strlen(buffer), file);
+  fwrite(buffer, 1, (size_t)len, file);
   fclose(file);
   return 0;
 }
@@ -98,7 +95,7 @@ int main(int argc, char *argv[])
   {
     clearScreen();
     printf("##CURRENT FILE: \"%s\" %s\nINDEX<%d/%d>, MODE = %s\n|--[i] INSERT mode, [esc] NORMAL mode, [s] save, [w] save and quit, [q] quit without saving\n~\n~\n", filename, (modified==true)?"(modified)":"", cursor, len, (mode==NORMAL)?"NORMAL":"INSERT");
-    drawBuffer(buffer, cursor);
+    drawBuffer(buffer, cursor, len);
     key = _getch();
     if (key == 0 || key == 224)
     {
@@ -135,7 +132,7 @@ int main(int argc, char *argv[])
       }
       if (key == 's')
       {
-        saveFile(filename, buffer);
+        saveFile(filename, buffer, len);
         modified = false;
         continue;
       }
@@ -152,7 +149,7 @@ int main(int argc, char *argv[])
       {
         modified = true;
         if (len < BUFFER_SIZE - 1){
-          shiftRight(buffer+cursor);
+          shiftRight(buffer+cursor, len - cursor);
           buffer[cursor++] = '\n';
           len++;
         }
@@ -163,23 +160,23 @@ int main(int argc, char *argv[])
         modified = true;
         len--;
         cursor--;
-        shiftLeft(buffer+cursor);
+        shiftLeft(buffer+cursor, len - cursor);
         continue;
       }
 
       if (len < BUFFER_SIZE - 1 && key >= 32 && key <= 126)
       {
-        len++;
         modified = true;
-        shiftRight(buffer + cursor);
+        shiftRight(buffer + cursor, len - cursor);
         buffer[cursor++] = (char)key;
+        len++;
       }
     }
   }
   clearScreen();
   if (key == 'w')
   {
-    saveFile(filename, buffer);
+    saveFile(filename, buffer, len);
     printf("## \"%s\" - saved successfully :D\n", filename);
   }
   else if (modified)
