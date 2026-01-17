@@ -1,8 +1,8 @@
 # Changelog
 
 ## v0.4.0
-- Switched to ANSI escape sequence based full-screen rendering
-- Automatic fallback if ANSI not supported
+- Switched to ANSI escape sequences instead of using ```system("cls")```
+- Editor now opens in full-screen mode for ANSI supported terminals
 
 ## v0.3.2
 - Added more save options ( [s] save, [q] quit, [w] save and quit )
