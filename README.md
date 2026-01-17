@@ -19,31 +19,39 @@ This is a learning project to better understand how text editors work! (also lea
 ---
 
 ## Build
-
 Requires:
 - GCC (MinGW / MSYS2)
 - Windows
 
 Build using make:
 ```sh
-make            # Release build (optimised)
+make            # Release build (optimized)
 make dev        # Development build (with debug symbols)
 ```
 
 ---
 
 ## Usage
+#### Adding to PATH (recommended):
+1. Copy `sedit.exe` to a folder (e.g., `C:\Tools\`)
+2. Search "Environment Variables" in Start Menu
+3. Edit "Path" and add your folder
+4. Restart your terminal
 
-Run with a filename:
+Then run from anywhere:
+```sh
+sedit filename.txt
+```
+
+Or run directly from the folder without PATH setup:
 ```sh
 ./sedit filename.txt
 ```
-
 ---
-
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history and changes.
+
 
 
 
