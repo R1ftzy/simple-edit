@@ -1,11 +1,16 @@
 CC      := gcc
-CFLAGS  := -O2 -Wall -Wextra -Wconversion -Wsign-conversion -Werror -pedantic
-TARGET  := sedit
+TARGET  := sedit.exe
 SRC     := src/main.c
 
-all: $(TARGET)
+CFLAGS_DEV  := -g -O0 -Wall -Wextra -Wconversion -Wsign-conversion -Werror -pedantic
+CFLAGS_RELEASE := -O2 -s -Wall -Wextra -Wconversion -Wsign-conversion -Werror -pedantic
 
-$(TARGET): $(SRC)
-	$(CC) $(CFLAGS) $(SRC) -o $(TARGET)
+all: release
 
-.PHONY: all
+dev:
+	$(CC) $(CFLAGS_DEV) $(SRC) -o $(TARGET)
+
+release:
+	$(CC) $(CFLAGS_RELEASE) $(SRC) -o $(TARGET)
+
+.PHONY: all dev release
