@@ -10,11 +10,13 @@ This is a learning project to better understand how text editors work! (also lea
 
 ## Features
 
+- ANSI escape sequence based full-screen rendering
 - Normal / Insert mode (vim-inspired)
 - Cursor support with arrow key movement
 - Edit text in-memory using a fixed-size buffer (for now)
 - Open existing files or create new ones
 - Explicit save and quit commands with unsaved changes protection
+- Fallback when ANSI is not supported
 
 ---
 
