@@ -26,7 +26,8 @@ Requires:
 
 Build using make:
 ```sh
-make
+make            # Release build (optimised)
+make dev        # Development build (with debug symbols)
 ```
 
 ---
